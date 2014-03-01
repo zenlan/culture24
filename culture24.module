@@ -1,0 +1,409 @@
+<?php
+
+/**
+ * @file
+ * AAM module
+ */
+define('C24_ADMIN_URL', 'admin/config/services/culture24');
+module_load_include('inc', 'culture24', 'culture24');
+module_load_include('php', 'culture24', 'include/culture24.api');
+
+//module_load_include('php', 'culture24', 'include/culture24.class');
+//module_load_include('php', 'culture24', 'include/culture24.class.event');
+//module_load_include('php', 'culture24', 'include/culture24.class.venue');
+
+function culture24_views_api() {
+  return array(
+      'api' => '3.0',
+      'path' => drupal_get_path('module', 'culture24') . '/views',
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function culture24_menu() {
+  $items[C24_ADMIN_URL] = array(
+      'title' => 'Culture24 API',
+      'description' => 'Culture24 API settings.',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('culture24_settings_form'),
+      'access arguments' => array('administer site configuration'),
+      'file' => 'culture24.admin.inc',
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_entity_info ().
+ */
+function culture24_entity_info() {
+
+  $info['c24_entity'] = array(
+      'label' => t('Culture24 Entity'),
+      'plural label' => t('Culture24 Entities'),
+      'bundles' => array(
+          'c24_event' => array(
+              'label' => 'Event',
+          ),
+          'c24_venue' => array(
+              'label' => 'Venue',
+          ),
+      ),
+  );
+  $info['c24_event'] = array(
+      'label' => t('Event'),
+      'plural label' => t('Events'),
+      'entity class' => 'Culture24EntityClass',
+      'controller class' => 'Culture24EntityController',
+      'metadata controller class' => FALSE,
+      'module' => 'culture24',
+      'exportable' => FALSE,
+      'fieldable' => FALSE,
+      'static cache' => TRUE,
+      'field cache' => FALSE,
+      'entity keys' => array(
+          'id' => 'uniqueID',
+      ),
+      //'load hook' => 'culture24_entity_load',
+      'creation callback' => 'culture24_entity_creation_callback',
+      'uri callback' => 'culture24_entity_uri_callback',
+      'access callback' => 'culture24_entity_access_callback',
+      //'label callback' => 'culture24_entity_label_callback',
+      //'view callback' => 'culture24_entity_view_callback',
+      'view modes' => array(
+          'full' => array(
+              'label' => t('Full'),
+              'custom settings' => FALSE,
+          ),
+          'teaser' => array(
+              'label' => t('Teaser'),
+              'custom settings' => TRUE,
+          ),
+          'debug' => array(
+              'label' => t('Debug'),
+              'custom settings' => FALSE,
+          ),
+      ),
+  );
+  $info['c24_venue'] = array(
+      'label' => t('Venue'),
+      'plural label' => t('Venues'),
+      'entity class' => 'Culture24EntityClass',
+      'controller class' => 'Culture24EntityController',
+      'metadata controller class' => FALSE,
+      'module' => 'culture24',
+      'exportable' => FALSE,
+      'fieldable' => FALSE,
+      'static cache' => TRUE,
+      'field cache' => FALSE,
+      'entity keys' => array(
+          'id' => 'uniqueID',
+      ),
+      //'load hook' => 'culture24_entity_load',
+      'creation callback' => 'culture24_entity_creation_callback',
+      'uri callback' => 'culture24_entity_uri_callback',
+      'access callback' => 'culture24_entity_access_callback',
+      //'label callback' => 'culture24_entity_label_callback',
+      //'view callback' => 'culture24_entity_view_callback',
+      'view modes' => array(
+          'full' => array(
+              'label' => t('Full'),
+              'custom settings' => FALSE,
+          ),
+          'teaser' => array(
+              'label' => t('Teaser'),
+              'custom settings' => TRUE,
+          ),
+          'debug' => array(
+              'label' => t('Debug'),
+              'custom settings' => FALSE,
+          ),
+      ),
+  );
+
+  return $info;
+}
+
+/**
+ * Access callback for the entity API.
+ *
+ * @param string $op
+ *   Operation type
+ * @param string $type
+ *   Type
+ * @param string $account
+ *   Account
+ */
+function culture24_entity_access_callback($op, $type = NULL, $account = NULL) {
+  return user_access('administer site configuration', $account);
+}
+
+/**
+ * Return the default url for this entity
+ *
+ * @param object $entity
+ *   Entity object
+ */
+function culture24_entity_uri_callback($entity) {
+  return array(
+      'path' => '/culture24/' . $entity->entity_type . '/' . $entity->id,
+  );
+}
+
+function culture24_entity_creation_callback($values, $entity_type) {
+  return new Culture24EntityClass($values, $entity_type);
+}
+
+/**
+ *
+ * Main class for IWM Collections entities.
+ */
+class Culture24EntityClass extends Entity {
+
+  var $options = array();
+
+  public function __construct(array &$values = array(), $entity_type) {
+    parent::__construct($values, $entity_type);
+  }
+
+  public function save() {
+    return NULL;
+  }
+
+}
+
+class Culture24EntityController extends EntityAPIController {
+
+  public function load($values = array(), $conditions = array()) {
+
+    $entities = array();
+    try {
+      foreach ($values as $data) {
+        if (is_object($data)) {
+          $data = (array) $data;
+        }
+        if (!is_array($data)) {
+          $id = $data;
+          $data = $this->fetchItemById($id);
+          if (!$data) {
+            $data['uniqueID'] = $id;
+            $data['name'] = 'not found';
+          }
+        }
+        $entities[] = entity_create($this->entityType, $data);
+      }
+    } catch (Exception $e) {
+
+      watchdog('Culture24EntityController::load', '(' . $id . ')' . $e->getMessage());
+    }
+    return $entities;
+  }
+
+  protected function fetchItemById($id) {
+
+    $result = array();
+    try {
+      $options = array(
+          'query_type' => str_replace('c24_', '', $this->entityType) . 's',
+      );
+      $c24 = new Culture24API($options);
+      $result = (array) $c24->fetchOneByID($id);
+    } catch (Exception $e) {
+
+      watchdog('Culture24EntityController::fetchItemById', '(' . $id . ')' . $e->getMessage());
+    }
+    return $result;
+  }
+
+  public function delete($ids) {
+    return TRUE;
+  }
+
+}
+
+function culture24_view_event_debug($obj, $full = FALSE) {
+  $result = $obj->get_last_request() . '<br />'
+          . 'status: ' . $obj->get_message() . '<br />'
+          . 'total: ' . $obj->get_found() . '<br />'
+          . 'validation errors: ' . print_r($obj->get_validation_errors(), 1) . '<br />';
+  if ($full) {
+    $result .= print_r($obj->get_records(), 1) . '<br /><br />';
+  }
+  return $result;
+}
+
+/**
+ * Format dates
+ *
+ * @param array $date_array
+ * @return array of formatted date strings
+ */
+function culture24_format_dates($dates, $format = 'd F Y') {
+  if (empty($dates)) {
+    return '';
+  } else {
+    $unique = array();
+    foreach ($dates as $k => $v) {
+      $start = strtotime(str_replace('/', '-', $v->startDate));
+      $end = strtotime(str_replace('/', '-', $v->endDate));
+      if ($start == $end) {
+        if (!in_array($start, $unique)) {
+          $dates[$k] = date($format, $start);
+          $unique[] = $start;
+        } else {
+          unset($dates[$k]);
+        }
+      } else {
+        $dates[$k] = date($format, $start) . ' - ' . date($format, $end);
+      }
+    }
+  }
+  return $dates;
+}
+
+/**
+ * Is it a daily event?
+ *
+ * @param array $dates
+ * @return boolean
+ */
+function culture24_is_date_daily($dates) {
+  if (isset($dates['value2']) && $dates['value2'] !== $dates['value']) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Is it a one-day event?
+ *
+ * @param array $dates
+ * @return boolean
+ */
+function culture24_is_date_single($dates) {
+  if (!isset($dates['value2']) || $dates['value2'] == $dates['value']) {
+    if (!isset($dates['rrule'])) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+// LOOKUP DATA
+
+/**
+ *
+ * @return array
+ */
+function culture24_region($index = null) {  
+  $array = array(
+      '',
+      'East Midlands',
+      'East of England',
+      'London',
+      'North East',
+      'North West',
+      'Northern Ireland',
+      'Scotland',
+      'South East',
+      'South West',
+      'Wales',
+      'West Midlands',
+      'Yorkshire',
+  );
+  if ($index) {
+    return $array[$index];
+  }
+  return $array;
+}
+
+/**
+ *
+ * @return array
+ */
+function culture24_country($index = null) {  
+  $array = array(      
+      '',
+      'Australia',
+      'Austria',
+      'Belgium ',
+      'Bosnia And Herzegovina',
+      'Canada',
+      'Denmark',
+      'Finland',
+      'France',
+      'Germany',
+      'Hungary',
+      'Iran',
+      'Ireland',
+      'Italy',
+      'Namibia',
+      'Netherlands',
+      'New Zealand',
+      'Poland',
+      'Portugal',
+      'Russian Federation',
+      'Serbia',
+      'Singapore',
+      'Slovakia',
+      'Slovenia',
+      'South Africa',
+      'Spain',
+      'Sweden',
+      'Switzerland',
+      'Trinidad and Tobago',
+      'United States',
+  );
+  if ($index) {
+    return $array[$index];
+  }
+  return $array;
+}
+
+/**
+ *
+ * @return array
+ */
+function culture24_audience($index = null) {  
+  $array = array(
+      'All ages',
+      'Any age',
+      'Family friendly',
+      '0-4',
+      '5-6',
+      '7-10',
+      '11-13',
+      '14-15',
+      '16-17',
+      '18+',
+  );
+  if ($index) {
+    return $array[$index];
+  }
+  return $array;
+}
+
+/**
+ *
+ * @return array
+ */
+function culture24_type($index = null) {  
+  $array = array(
+      'Late opening',
+      'Lecture',
+      'Exhibition (permanent)',
+      'Exhibition (temporary)',
+      'Event',
+      'Guided tour',
+      'Living history or re-enactment',
+      'Performance ',
+      'Seasonal event ',
+      'Storytelling session',
+      'Workshop or activity session',
+  );
+  if ($index) {
+    return $array[$index];
+  }
+  return $array;
+}

@@ -1,0 +1,15 @@
+name = Culture24 API
+description = Connect and query the Culture24 events and venues API
+core = 7.x
+configure = admin/config/services/culture24
+dependencies[] = entity
+
+files[] = culture24.admin.inc
+files[] = culture24.inc
+files[] = culture24.admin.info.inc
+files[] = culture24Web.test
+files[] = views/culture24_argument.inc
+files[] = views/culture24_query.inc
+files[] = views/culture24_form.inc
+files[] = views/culture24_filter.inc
+files[] = views/culture24_field.inc

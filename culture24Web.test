@@ -1,0 +1,267 @@
+<?php
+/**
+ * @file
+ * Culture24 web test cases.
+ *
+ * @ingroup Culture24
+ */
+
+/**
+ * Test adlibtools module functions
+ */
+class Culture24WebTestCase extends DrupalWebTestCase {
+
+  /**
+   * Display test details
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Culture24 Web Test',
+      'description' => 'Web tests for the Culture24 module.',
+      'group' => 'Culture24',
+    );
+  }
+
+  /**
+   * Set up this test
+   */
+  function setUp() {
+    parent::setUp('culture24');
+  }
+
+  /**
+   * Test adlibtools_load()
+   */
+  function TESTentityLoad() {
+    $group = 'entity_load';
+    $result = entity_create('c24_event', array());     
+    $this->assertTrue(is_a($result, 'c24_event'),
+      'load one entity $result is c24_event', $group);
+//    $machine_name1 = $this->entityCreate();
+//    $machine_name2 = $this->entityCreate();
+//    $result = culture24_load($machine_name1);
+//    $this->assertTrue(is_a($result, 'AdlibtoolsEntity'),
+//      'load one entity $result is AdlibtoolsEntity', $group);
+//    $this->assertEqual($result->machine_name, $machine_name1,
+//      'load one entity machine names match');
+//    $result = adlibtools_load(array($machine_name1, $machine_name2));
+//    $this->assertTrue(is_array($result),
+//      'load array of entities $result is array', $group);
+//    $this->assertEqual(count($result), 2,
+//      'load array of entities $result count correct', $group);
+//    $result = adlibtools_load(FALSE);
+//    $this->assertTrue(is_array($result),
+//      'load all entities $result is array', $group);
+//    $this->assertEqual(count($result), 2,
+//      'load all entities $result count correct', $group);
+  }
+
+  /**
+   * Test ping server
+   */
+  function TESTpingServer() {
+    $group = 'ping_server';
+//    $result = adlibtools_ping_server(ADLIBTOOLS_TEST_URLDB);
+//    $this->assertTrue($result, 'ping_server: good url success', $group);
+//    $result = adlibtools_ping_server('test2xxx.adlibsoft.com/api/wwwopac.ashx');
+//    $this->assertFalse($result, 'ping_server: bad url error', $group);
+  }
+
+  /**
+   * Test entity property info
+   */
+  function TESTentityPropertyInfoArray() {
+    $group = 'entity_property_info_array';
+//    $machine_name = $this->entityCreate('withprops');
+//    $result = adlibtools_entity_property_info();
+//    $this->assertTrue(isset($result[$machine_name]['properties']),
+//      'bundle ' . $machine_name . ' has properties', $group);
+//    $this->assertTrue(isset($result[$machine_name]['properties']['priref']),
+//      'bundle has priref:' .
+//      $result[$machine_name]['properties']['priref']['label'], $group);
+//    $this->assertTrue(isset($result[$machine_name]['properties']['title']),
+//      'bundle has title:' .
+//      $result[$machine_name]['properties']['title']['label'], $group);
+  }
+
+  /**
+   * Test adlibtools admin UI form submit
+   */
+  function TESTformSubmit() {
+    $group = 'form_submit';
+//    $machine_name = 'adlibtest' . rand(100, 999);
+//    $form = array();
+//    $form_state = array(
+//      'entity_type' => 'adlibtools',
+//      'values' => array(
+//        'name' => drupal_ucfirst($machine_name),
+//        'machine_name' => $machine_name,
+//        'label' => drupal_strtoupper($machine_name),
+//        'url' => 'http://test2.adlibsoft.com/api/wwwopac.ashx?database=collect.inf',
+//        'idkey' => 'priref',
+//        'searchfields' => array('title' => 'title'),
+//        'getmetadata' => 1,
+//      ),
+//    );
+//    adlibtools_form_submit($form, $form_state);
+//    $entity = adlibtools_load($machine_name);
+//    $this->assertTrue(is_object($entity), '$entity is object', $group);
+//    $this->assertTrue(is_a($entity, 'AdlibtoolsEntity'),
+//      '$entity is AdlibtoolsEntity', $group);
+//    $this->assertTrue(isset($entity->name),
+//      '$entity has name', $group);
+//    $this->assertEqual($entity->name == drupal_ucfirst($machine_name),
+//      '$entity name is correct', $group);
+//    $this->assertTrue(isset($entity->machine_name),
+//      '$entity has machine_name', $group);
+//    $this->assertEqual($entity->machine_name == $machine_name,
+//      '$entity machine_name is correct', $group);
+//    $this->assertTrue(isset($entity->label),
+//      '$entity has label', $group);
+//    $this->assertEqual($entity->label == drupal_strtoupper($machine_name),
+//      '$entity label is correct', $group);
+//    $this->assertTrue(isset($entity->url),
+//      '$entity has url', $group);
+//    // The 'http://' should be stripped from the url on submit.
+//    $this->assertEqual($entity->url == 'test2.adlibsoft.com/api/wwwopac.ashx?database=collect.inf',
+//      '$entity url is correct', $group);
+//    $this->assertTrue(isset($entity->idkey),
+//      '$entity has idkey', $group);
+//    $this->assertEqual($entity->idkey == 'priref',
+//      '$entity idkey is correct', $group);
+//    $this->assertTrue(isset($entity->searchfields),
+//      '$entity searchfields name', $group);
+//    $this->assertTrue(is_array($entity->searchfields),
+//      '$entity searchfields is array ' . $entity->searchfields, $group);
+//    $this->assertTrue(isset($entity->properties),
+//      '$entity properties name', $group);
+//    $this->assertTrue(is_array($entity->properties),
+//      '$entity properties is array ' . $entity->properties, $group);
+//    $this->assertTrue(isset($entity->indexed),
+//      '$entity indexed name', $group);
+//    $this->assertTrue(is_array($entity->indexed),
+//      '$entity indexed is array ' . $entity->indexed, $group);
+//    $this->assertTrue(isset($entity->groups),
+//      '$entity groups name', $group);
+//    $this->assertTrue(is_array($entity->groups),
+//      '$entity groups is array ' . $entity->groups, $group);
+//
+//    $info = entity_get_info($machine_name);
+//    $this->assertTrue(is_array($info), '$info is array', $group);
+//    $this->assertTrue(isset($info['label']), '$info declares label', $group);
+//    $this->assertEqual($info['label'], $form_state['values']['label'],
+//      '$info label is ' . $form_state['values']['label'], $group);
+//    $this->assertTrue(isset($info['entity class']),
+//      '$info declares entity class', $group);
+//    $this->assertEqual($info['entity class'], 'AdlibEntity',
+//      '$info entity class is AdlibEntity', $group);
+//    $this->assertTrue(isset($info['controller class']),
+//      '$info declares controller', $group);
+//    $this->assertEqual($info['controller class'], 'AdlibEntityController',
+//      '$info controller is AdlibEntityController', $group);
+//    $this->assertTrue(isset($info['entity keys']['id']),
+//      '$info declares entity keys', $group);
+//    $this->assertEqual($info['entity keys']['id'], 'priref',
+//      '$info entity keys id is priref', $group);
+//    $this->assertTrue(isset($info['load hook']),
+//      '$info declares load hook', $group);
+//    $this->assertEqual($info['load hook'], 'adlibtools_adlib_load',
+//      '$info load hook is adlibtools_adlib_load', $group);
+//    $props = entity_get_all_property_info($machine_name);
+//    $this->assertTrue(is_array($props), '$props is array', $group);
+//    $this->assertTrue(isset($props['priref']),
+//      '$props has priref - ' . $props['priref']['label'], $group);
+//    $this->assertTrue(isset($props['title']),
+//      '$props has title - ' . $props['title']['label'], $group);
+  }
+
+  /**
+   * Test adlib entity creation
+   */
+  function TESTcreationCallback() {
+    $group = 'creation_callback';
+//    $machine_name = $this->entityCreate();
+//    $this->assertTrue($machine_name, 'entity created ' . $machine_name, $group);
+//    $result = adlibtools_adlib_creation_callback(array(
+//      'entity_type' => $machine_name), $machine_name);
+//    $this->assertTrue(is_a($result, 'AdlibEntity'),
+//      '$result is AdlibEntity', $group);
+//    $this->assertEqual($result->entity_type, $machine_name,
+//      '$result->entity_type is ' . $machine_name, $group);
+//    $this->assertTrue(is_a($result->adlibtoolsEntity, 'adlibToolsEntity'),
+//      '$result->entity is adlibToolsEntity', $group);
+//    $this->assertNull($result->id, '$result->id is null', $group);
+  }
+
+  /**
+   * Test Adlib entity controller object
+   */
+  function TESTentityGetController() {
+    $group = 'entity_get_controller';
+//    $machine_name = $this->entityCreate();
+//    $result = entity_get_controller($machine_name);
+//    $this->assertTrue(is_a($result, 'AdlibEntityController'),
+//      '$result is AdlibEntityController', $group);
+//    $this->assertTrue(is_a($result->adlibtoolsEntity, 'adlibToolsEntity'),
+//      '$result->adlibtoolsEntity is adlibToolsEntity', $group);
+  }
+
+  /**
+   * Test controller method fetchItemById
+   */
+  function TESTfetchItemById() {
+    $group = 'fetchItemById';
+//    $id = 99;
+//    $machine_name = $this->entityCreate();
+//    $controller = entity_get_controller($machine_name);
+//    $result = $controller->fetchItemById($id);
+//    $this->assertTrue(is_array($result),
+//      '$result is array ' . print_r($result, TRUE), $group);
+  }
+
+  /**
+   * Test Adlib controller load method
+   * controller->load is not normally called directly
+   */
+  function TESTload() {
+    $group = 'load';
+//    $id = 99;
+//    $machine_name = $this->entityCreate();
+//    $controller = entity_get_controller($machine_name);
+//    $result = $controller->load(array($id));
+//    $this->assertTrue(is_array($result),
+//      '$result is array ' . print_r($result, TRUE), $group);
+//    $this->assertEqual(count($result), 1,
+//      '$result has 1 element ', $group);
+//    $this->assertTrue(isset($result[$id]),
+//      '$result element key is priref ' . $id, $group);
+//    $this->assertTrue(is_a($result[$id], 'AdlibEntity'),
+//      '$result is AdlibEntity', $group);
+//    $this->assertEqual($result[$id]->priref, $id,
+//      '$result[$id] has priref element = ' . $id, $group);
+//    $this->assertEqual($result[$id]->entity_type, $machine_name,
+//      '$result[$id] has entity_type element = ' . $machine_name, $group);
+//    $this->assertTrue(is_a($result[$id]->adlibtoolsEntity, 'AdlibtoolsEntity'),
+//      '$result[$id] has adlibtoolsEntity property of type AdlibtoolsEntity',
+//      $group);
+  }
+
+  /**
+   * Create an adlibtools entity for testing with or without properties
+   * Track used names in rare event of duplicate
+   *
+   * @param boolean $withprops
+   *   Create with or without properties
+   */
+  protected function entityCreate($type) {
+    try {
+      //$machine_name = $type . rand(100, 999);
+      $entity = entity_create('c24_event', array());      
+      return $entity;
+    }
+    catch (Exception $e) {
+      $this->error($e->getMessage(), 'entityCreate');
+      return FALSE;
+    }
+  }
+}
