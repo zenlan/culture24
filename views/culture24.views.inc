@@ -70,13 +70,13 @@ function culture24_views_data() {
   );
   $propsE = entity_get_all_property_info('c24_event');
   foreach ($propsE as $k => $v) {
-
     $data['c24_event'][$k] = array(
         'title' => t($k),
         'help' => t($k),
         'field' => array(
             'handler' => 'culture24_views_handler_field',
             'click sortable' => FALSE,
+            'cardinality' => $v['cardinality'], 
         )
     );
   }
@@ -108,16 +108,10 @@ function culture24_views_data() {
       'handler' => 'culture24_views_handler_filter',
       'label' => t('Venue'),
   );
-  
+
   /**
    * contentTag alias 'region'
    */
-//  $data['c24_event']['region'] = array(
-//      'label' => t('Region'),
-//      'title' => t('region'),
-//      'help' => t('region'),
-//      'real field' => 'contentTag',
-//  );
   $data['c24_event']['region']['filter'] = array(
       'handler' => 'culture24_views_handler_filter',
       'label' => t('Region'),
@@ -128,12 +122,6 @@ function culture24_views_data() {
   /**
    * contentTag alias 'country'
    */
-//  $data['c24_event']['country'] = array(
-//      'label' => t('Country'),
-//      'title' => t('country'),
-//      'help' => t('country'),
-//      'real field' => 'contentTag',
-//  );
   $data['c24_event']['country']['filter'] = array(
       'handler' => 'culture24_views_handler_filter',
       'label' => t('Country'),
@@ -141,7 +129,6 @@ function culture24_views_data() {
       'help' => t('country'),
       'real field' => 'contentTag',
   );
-
 
   $data['c24_venue']['table']['group'] = t('Culture24');
   $data['c24_venue']['table']['base'] = array(
@@ -176,4 +163,30 @@ function culture24_views_data() {
   );
 
   return $data;
+}
+
+function culture24_field_cardinality($field) {
+
+  $multi = array(
+      'type',
+      'contentTag',
+      'link',
+      'url',
+      'charges',
+      'instance',
+      'audience',
+      'otherNames',
+      'type',
+      'openingHours',
+      'discounts',
+      'travelDirections',
+      'facilitiesInformation',
+      'facility',
+      'service',
+      'collections',
+  );
+  if (in_array($field, $multi)) {
+    return TRUE;
+  }
+  return FALSE;
 }

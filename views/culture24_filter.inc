@@ -38,6 +38,15 @@ class culture24_views_handler_filter extends views_handler_filter {
   function value_form(&$form, &$form_state) {
     $form['value'] = array();
     switch ($this->field) {
+      case 'contentTag':
+      case 'name':
+      case 'venueID':
+        $form['value'] = array(
+            '#type' => 'textfield',
+            '#title' => t($this->definition['label']),
+            '#default_value' => '',
+        );
+        break;
       case 'region':
       case 'country':
       case 'audience':
@@ -73,14 +82,19 @@ class culture24_views_handler_filter extends views_handler_filter {
     $values = '';
     foreach ($this->value as $val) {
       switch ($this->field) {
+        case 'contentTag':
+        case 'name':
+        case 'venueID':
+          $values = $val;
+          break;
         case 'region':
         case 'audience':
         case 'type':
         case 'country':
           $values .= call_user_func_array($this->lufunc, array($val));
+          break;
       }
     }
-    $values = rtrim($values, ',');
     $this->query->add_where($this->real_field, rtrim($values, ','));
     return;
   }

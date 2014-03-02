@@ -12,12 +12,12 @@ class culture24_views_plugin_query extends views_plugin_query {
   /**
    * @var type array
    */
-  var $args;
+  var $args = array();
 
   /**
    * @var type array
    */
-  var $filters;
+  var $filters = array();
 
   /**
    * Create the basic query object and fill with default values.

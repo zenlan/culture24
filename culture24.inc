@@ -18,6 +18,125 @@ function culture24_http_request($request) {
   return drupal_http_request($request);
 }
 
+
+// LOOKUP DATA
+
+/**
+ *
+ * @return array
+ */
+function culture24_region($index = null) {  
+  $array = array(
+      //'',
+      'East Midlands',
+      'East of England',
+      'London',
+      'North East',
+      'North West',
+      'Northern Ireland',
+      'Scotland',
+      'South East',
+      'South West',
+      'Wales',
+      'West Midlands',
+      'Yorkshire',
+  );
+  if ($index) {
+    return $array[$index];
+  }
+  return $array;
+}
+
+/**
+ *
+ * @return array
+ */
+function culture24_country($index = null) {  
+  $array = array(      
+      //'',
+      'Australia',
+      'Austria',
+      'Belgium ',
+      'Bosnia And Herzegovina',
+      'Canada',
+      'Denmark',
+      'Finland',
+      'France',
+      'Germany',
+      'Hungary',
+      'Iran',
+      'Ireland',
+      'Italy',
+      'Namibia',
+      'Netherlands',
+      'New Zealand',
+      'Poland',
+      'Portugal',
+      'Russian Federation',
+      'Serbia',
+      'Singapore',
+      'Slovakia',
+      'Slovenia',
+      'South Africa',
+      'Spain',
+      'Sweden',
+      'Switzerland',
+      'Trinidad and Tobago',
+      'United States',
+  );
+  if ($index) {
+    return $array[$index];
+  }
+  return $array;
+}
+
+/**
+ *
+ * @return array
+ */
+function culture24_audience($index = null) {  
+  $array = array(
+      'All ages',
+      'Any age',
+      'Family friendly',
+      '0-4',
+      '5-6',
+      '7-10',
+      '11-13',
+      '14-15',
+      '16-17',
+      '18+',
+  );
+  if ($index) {
+    return $array[$index];
+  }
+  return $array;
+}
+
+/**
+ *
+ * @return array
+ */
+function culture24_type($index = null) {  
+  $array = array(
+      'Late opening',
+      'Lecture',
+      'Exhibition (permanent)',
+      'Exhibition (temporary)',
+      'Event',
+      'Guided tour',
+      'Living history or re-enactment',
+      'Performance ',
+      'Seasonal event ',
+      'Storytelling session',
+      'Workshop or activity session',
+  );
+  if ($index) {
+    return $array[$index];
+  }
+  return $array;
+}
+
 /**
  * display raw Culture24 record
  *
