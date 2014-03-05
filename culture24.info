@@ -13,3 +13,4 @@ files[] = views/culture24_query.inc
 files[] = views/culture24_form.inc
 files[] = views/culture24_filter.inc
 files[] = views/culture24_field.inc
+files[] = views/culture24_field_list.inc

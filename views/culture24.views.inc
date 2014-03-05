@@ -74,9 +74,9 @@ function culture24_views_data() {
         'title' => t($k),
         'help' => t($k),
         'field' => array(
-            'handler' => 'culture24_views_handler_field',
             'click sortable' => FALSE,
             'cardinality' => $v['cardinality'], 
+            'handler' => ($v['cardinality'] === FIELD_CARDINALITY_UNLIMITED ? 'culture24_views_handler_field_prerender_list' : 'culture24_views_handler_field')
         )
     );
   }
@@ -139,13 +139,13 @@ function culture24_views_data() {
   );
   $propsV = entity_get_all_property_info('c24_venue');
   foreach ($propsV as $k => $v) {
-
     $data['c24_venue'][$k] = array(
         'title' => t($k),
         'help' => t($k),
         'field' => array(
-            'handler' => 'culture24_views_handler_field',
             'click sortable' => FALSE,
+            'cardinality' => $v['cardinality'], 
+            'handler' => ($v['cardinality'] === FIELD_CARDINALITY_UNLIMITED ? 'culture24_views_handler_field_prerender_list' : 'culture24_views_handler_field')
         )
     );
   }
@@ -162,6 +162,35 @@ function culture24_views_data() {
       'label' => 'Name',
   );
 
+$data['c24_venue']['type']['filter'] = array(
+      'handler' => 'culture24_views_handler_filter',
+      'label' => t('Type'),
+  );
+  $data['c24_venue']['contentTag']['filter'] = array(
+      'handler' => 'culture24_views_handler_filter',
+      'label' => t('Tags'),
+  );
+
+  /**
+   * contentTag alias 'region'
+   */
+  $data['c24_venue']['region']['filter'] = array(
+      'handler' => 'culture24_views_handler_filter',
+      'label' => t('Region'),
+      'title' => t('region'),
+      'help' => t('region'),
+      'real field' => 'contentTag',
+  );
+  /**
+   * contentTag alias 'country'
+   */
+  $data['c24_venue']['country']['filter'] = array(
+      'handler' => 'culture24_views_handler_filter',
+      'label' => t('Country'),
+      'title' => t('country'),
+      'help' => t('country'),
+      'real field' => 'contentTag',
+  );  
   return $data;
 }
 
